@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TaskPriority } from "./task.priority";
 import { TaskStatus } from "./task.status";
 import { Operation } from "../operation.model";
@@ -17,7 +17,7 @@ export class Task {
   content: string
 
   @Column()
-  date: Date
+  date: string
 
   @Column()
   priority: TaskPriority
@@ -25,10 +25,10 @@ export class Task {
   @Column()
   status: TaskStatus
 
-  @OneToMany(type => Operation, operation => operation.task)
+  @OneToMany(type => Operation, operation => operation.task, {cascade: true, eager: true, onDelete: "CASCADE"})
   history: Operation[]
 
-  @OneToMany(type => TasksList, tasksList => tasksList.tasks)
+  @ManyToOne(type => TasksList, tasksList => tasksList.tasks, { onDelete: "CASCADE"})
   list: TasksList
 
 }

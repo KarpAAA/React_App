@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Task } from "./task/task.model";
 
 
@@ -6,15 +6,15 @@ import { Task } from "./task/task.model";
 export class Operation {
 
   @PrimaryGeneratedColumn()
-  id:number;
+  id?:number;
 
   @Column({length: 500})
   action:string
 
   @Column()
-  dateTime:Date;
+  dateTime:string;
 
-  @OneToMany(type => Task, task => task.history)
-  task: Task
+  @ManyToOne(type => Task, task => task.history, {onDelete: "CASCADE"})
+  task?: Task
 
 }
