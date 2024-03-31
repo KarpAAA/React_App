@@ -1,0 +1,29 @@
+[33mcommit dca49621198058681a73fa387acec4885c1d4f3a[m[33m ([m[1;36mHEAD -> [m[1;32mfront_branch[m[33m)[m
+Author: Ivan Karpinskyi <ivankarpinskij.ua@gmail.com>
+Date:   Fri Mar 29 22:16:47 2024 +0200
+
+    Managed database entities
+
+[33mcommit 13a889551925c035112ee5961c34097d6d717466[m
+Author: Ivan Karpinskyi <ivankarpinskij.ua@gmail.com>
+Date:   Fri Mar 29 21:42:41 2024 +0200
+
+    Claared default project
+
+[33mcommit bf5f062bad555e8877d1dbaad67b8448ecb3363c[m[33m ([m[1;31morigin/front_branch[m[33m, [m[1;31morigin/backend-branch[m[33m, [m[1;32mbackend-branch[m[33m)[m
+Author: Ivan Karpinskyi <ivankarpinskij.ua@gmail.com>
+Date:   Fri Mar 29 21:40:01 2024 +0200
+
+    Worked on view made tasks page divided by task tasklist history and modelView components
+
+[33mcommit 5e0023ffafc17962a4d7f4873755b733c4dd591c[m
+Author: Ivan Karpinskyi <ivankarpinskij.ua@gmail.com>
+Date:   Fri Mar 29 12:54:59 2024 +0200
+
+    Clered default
+
+[33mcommit 58aa895453c9a66b8e276a1e92f06b891ab27a32[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Ivan Karpinskyi <ivankarpinskij.ua@gmail.com>
+Date:   Fri Mar 29 12:46:25 2024 +0200
+
+    Initial commit
