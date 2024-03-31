@@ -2,114 +2,69 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {fas} from "@fortawesome/free-solid-svg-icons";
 import {TaskList} from "./components/TaskList";
 import {History} from "./components/History";
-import {useState} from "react";
-import {ModalWindow} from "./components/ModalWindow";
-import {BrowserRouter as Router, useNavigate} from "react-router-dom";
+import React, {useRef} from "react";
+import {ModalWindow} from "./components/modal/ModalWindow";
+import {useDispatch, useSelector} from "react-redux";
+import {uiActions} from "./store/slices/ui.slice";
+import {useGetAllTasksListsQuery} from "./store/apis/task.api";
+import {ErrorContainer} from "./components/other/ErrorContainer";
+import {useNavigate} from "react-router-dom";
 
 function App() {
     const navigate = useNavigate();
-    const [ifShowHistory, setIfShowHistory] = useState(false);
-    const [ifShowModal, setIfShowModal] = useState(true);
-    const history =  {
-        operations: [
-            {
-                action: "lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit\n" +
-                    "                                lorem ipsum dolor sit lorem ipsum dolor sit lorem ipsum dolor sit",
-                dateTime: 'Mar 5 at 5:10pm'
-            }
-        ]
-    }
-    const tasksList = [
-        {
-            title: "To do",
-            number: 45,
-            tasks: [
-                {
-                    title: "Task 1",
-                    content: "Замовте наші послуги таксі, щоб швидко та комфортно дістатися до\n" +
-                        "                вашого пункту призначення. Наші досвідчені водії та зручні автомобілі зроблять ваш поїздку приємною та\n" +
-                        "                безпечною. Дзвоніть зараз, щоб замовити таксі!",
-                    date: "Wed, 19 Apr",
-                    priority: {
-                        value: "Medium",
-                        color: "grey"
-                    },
-                    status: "InProgress",
-                    history: []
-                },
-                {
-                    title: "Task 1",
-                    content: "Замовте наші послуги таксі, щоб швидко та комфортно дістатися до\n" +
-                        "                вашого пункту призначення. Наші досвідчені водії та зручні автомобілі зроблять ваш поїздку приємною та\n" +
-                        "                безпечною. Дзвоніть зараз, щоб замовити таксі!",
-                    date: "Wed, 19 Apr",
-                    priority: {
-                        value: "Medium",
-                        color: "grey"
-                    },
-                    history: []
-                }
-            ],
+    const dispatcher = useDispatch();
+    const {modalOpenState, historyOpenState} = useSelector(state => state.ui);
+    const {isError} = useSelector(state => state.error);
+    const {data: tasksList} = useGetAllTasksListsQuery();
 
-        },
-        {
-            title: "To do",
-            number: 45,
-            tasks: [
-                {
-                    title: "Task 1",
-                    content: "Замовте наші послуги таксі, щоб швидко та комфортно дістатися до\n" +
-                        "                вашого пункту призначення. Наші досвідчені водії та зручні автомобілі зроблять ваш поїздку приємною та\n" +
-                        "                безпечною. Дзвоніть зараз, щоб замовити таксі!",
-                    date: "Wed, 19 Apr",
-                    priority: {
-                        value: "Medium",
-                        color: "grey"
-                    },
-                    history: []
-                }
-            ],
+    const tasksListRef = useRef(null);
 
-        },
-        {
-            title: "To do",
-            number: 45,
-            tasks: [
-
-            ],
-
-        },
-        {
-            title: "To do",
-            number: 45,
-            tasks: [
-                {
-                    title: "Task 1",
-                    content: "Замовте наші послуги таксі, щоб швидко та комфортно дістатися до\n" +
-                        "                вашого пункту призначення. Наші досвідчені водії та зручні автомобілі зроблять ваш поїздку приємною та\n" +
-                        "                безпечною. Дзвоніть зараз, щоб замовити таксі!",
-                    date: "Wed, 19 Apr",
-                    priority: {
-                        value: "Medium",
-                        color: "grey"
-                    },
-                    history: []
-                }
-            ],
-
+    const handleScrollRight = () => {
+        if (tasksListRef.current) {
+            tasksListRef.current.scrollBy({
+                left: tasksListRef.current.offsetWidth,
+                behavior: 'smooth'
+            });
         }
-    ];
+    };
+    const handleScrollLeft = () => {
+        if (tasksListRef.current) {
+            tasksListRef.current.scrollBy({
+                left: -tasksListRef.current.offsetWidth,
+                behavior: 'smooth'
+            });
+        }
+    };
 
-    const handleHistoryClicked = () => {
-        setIfShowHistory(true);
+    const handleCreateTasksList = () => {
+        navigate('task-list/create');
+        dispatcher(uiActions.setModalOpenState(true));
     }
+    const handleHistoryClicked = () => {
+        dispatcher(uiActions.setHistoryOpenState(true));
+    }
+
     return (
+
         <div>
             <div className={"flex flex-row justify-between my-4 align-middle"}>
                 <div id={'header-title'} className={"font-bold text-3xl text-center"}>
                     My Task Board
                 </div>
+
                 <div id={'options'} className={'flex align-middle'}>
+                    <button
+                        className={"mr-5 text-black border-solid border-2 border-gray-500 rounded px-3 py-2"}
+                        onClick={handleScrollLeft}>
+                        <FontAwesomeIcon className={'px-1'} icon={fas.faArrowLeft}/>
+                        Left
+                    </button>
+                    <button
+                        className={"mr-5 text-black border-solid border-2 border-gray-500 rounded px-3 py-2"}
+                        onClick={handleScrollRight}>
+                        Right
+                        <FontAwesomeIcon className={'px-1'} icon={fas.faArrowRight}/>
+                    </button>
                     <button
                         className={"mr-5 text-black border-solid border-2 border-gray-500 rounded px-3 py-2"}
                         onClick={handleHistoryClicked}
@@ -118,11 +73,8 @@ function App() {
                         History
                     </button>
                     <button
+                        onClick={handleCreateTasksList}
                         className={"mr-5 text-white bg-blue-950 rounded px-3 py-2"}
-                        onClick={() => {
-                            setIfShowModal(true);
-                            navigate('task/1')
-                        }}
                     >
                         <FontAwesomeIcon className={'px-1'} icon={fas.faPlus}/>
                         Create new list
@@ -130,20 +82,24 @@ function App() {
                 </div>
             </div>
 
-            <div id={"tasks-lists"} className={'flex flex-wrap w-100'}>
+            <div id={"tasks-lists"} ref={tasksListRef}
+                 className={'flex flex-nowrap  overflow-x-auto w-100 min-h-60'}>
                 {tasksList && tasksList.map(list =>
-                    <TaskList list={list}></TaskList>
+                    <TaskList key={list.id} list={list}></TaskList>
                 )}
 
             </div>
             {
-                ifShowHistory && <History history={history} close={() => setIfShowHistory(false)}>
-                </History>
+                historyOpenState && <History></History>
             }
 
             {
-                ifShowModal && <ModalWindow close={() => setIfShowModal(false)}/>
+                modalOpenState && <ModalWindow/>
             }
+            {
+                isError && <ErrorContainer></ErrorContainer>
+            }
+
         </div>
     );
 }
